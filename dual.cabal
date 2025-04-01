@@ -1,0 +1,43 @@
+cabal-version:   3.14
+name:            dual
+version:         0.1.0.0
+license:         NONE
+author:          konsumlamm
+maintainer:      konsumlamm@gmail.com
+build-type:      Simple
+extra-doc-files: CHANGELOG.md
+
+common warnings
+    ghc-options: -Wall
+
+library
+    import:           warnings
+    exposed-modules:  Numeric.Dual
+    build-depends:    base ^>= 4.20.0.0
+    hs-source-dirs:   src
+    default-language: Haskell2010
+
+test-suite dual-test
+    import:           warnings
+    default-language: Haskell2010
+    type:             exitcode-stdio-1.0
+    hs-source-dirs:   test
+    main-is:          Main.hs
+    ghc-options:      -Wno-type-defaults
+    build-depends:
+        base ^>= 4.20.0.0,
+        dual,
+        tasty,
+        tasty-quickcheck,
+
+benchmark dual-bench
+    import:           warnings
+    default-language: Haskell2010
+    type:             exitcode-stdio-1.0
+    hs-source-dirs:   bench
+    main-is:          Main.hs
+    ghc-options:      -ddump-simpl -dsuppress-all -dno-suppress-type-signatures -ddump-to-file
+    build-depends:
+        base,
+        dual,
+        tasty-bench,
