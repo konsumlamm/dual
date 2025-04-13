@@ -9,6 +9,20 @@ bug-reports:     https://github.com/konsumlamm/dual/issues
 synopsis:        Dual numbers
 build-type:      Simple
 extra-doc-files: CHANGELOG.md
+tested-with:
+    GHC == 8.0
+    GHC == 8.2
+    GHC == 8.4
+    GHC == 8.6
+    GHC == 8.8
+    GHC == 8.10
+    GHC == 9.0
+    GHC == 9.2
+    GHC == 9.4
+    GHC == 9.6
+    GHC == 9.8
+    GHC == 9.10
+    GHC == 9.12
 
 common warnings
     ghc-options: -Wall
@@ -16,7 +30,7 @@ common warnings
 library
     import:           warnings
     exposed-modules:  Numeric.Dual
-    build-depends:    base ^>= 4.20.0.0
+    build-depends:    base >= 4.9 && < 4.22
     hs-source-dirs:   src
     default-language: Haskell2010
 
@@ -28,7 +42,7 @@ test-suite dual-test
     main-is:          Main.hs
     ghc-options:      -Wno-type-defaults
     build-depends:
-        base ^>= 4.20.0.0,
+        base,
         dual,
         tasty,
         tasty-quickcheck,
