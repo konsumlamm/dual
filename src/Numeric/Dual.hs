@@ -1,5 +1,9 @@
 {-# LANGUAGE RankNTypes #-}
 
+-- | Dual numbers.
+--
+-- Dual numbers can be used for automatic differentiation: \(f(a+b\varepsilon)=f(a)+bf'(a)\varepsilon\).
+-- The `derivative` function makes use of this to compute the derivative of functions @forall a. Floating a => a -> a@.
 module Numeric.Dual
     ( Dual(..)
     , derivative
@@ -9,6 +13,7 @@ module Numeric.Dual
 
 import Numeric
 
+-- | A dual number. @Dual a b@ represents the dual number \(a+b\varepsilon\), where \(\varepsilon^2=0\).
 data Dual a = Dual !a !a
 
 instance (Num a) => Num (Dual a) where
@@ -33,24 +38,27 @@ instance (Floating a) => Floating (Dual a) where
     sqrt (Dual u u') = Dual (sqrt_u) (u' / (2 * sqrt_u)) where sqrt_u = sqrt u
     sin (Dual u u') = Dual (sin u) (u' * cos u)
     cos (Dual u u') = Dual (cos u) (-u' * sin u)
-    tan (Dual u u') = Dual tan_u (u' * (1 + tan_u * tan_u)) where tan_u = tan u
-    asin (Dual u u') = Dual (asin u) (u' / sqrt (1 - u * u))
-    acos (Dual u u') = Dual (acos u) (-u' / sqrt (1 - u * u))
-    atan (Dual u u') = Dual (atan u) (u' / (1 + u * u))
+    tan (Dual u u') = Dual tan_u (u' * (1 + tan_u * tan_u)) where tan_u = tan u --
+    asin (Dual u u') = Dual (asin u) (u' / sqrt (1 - u * u)) --
+    acos (Dual u u') = Dual (acos u) (-u' / sqrt (1 - u * u)) --
+    atan (Dual u u') = Dual (atan u) (u' / (1 + u * u)) --
     sinh (Dual u u') = Dual (sinh u) (u' * cosh u)
     cosh (Dual u u') = Dual (cosh u) (u' * sinh u)
-    tanh (Dual u u') = Dual tanh_u (u' * (1 - tanh_u * tanh_u)) where tanh_u = tanh u
-    asinh (Dual u u') = Dual (asinh u) (u' / sqrt (u * u + 1))
-    acosh (Dual u u') = Dual (acosh u) (u' / sqrt (u * u - 1))
-    atanh (Dual u u') = Dual (atanh u) (u' / (1 - u * u))
+    tanh (Dual u u') = Dual tanh_u (u' * (1 - tanh_u * tanh_u)) where tanh_u = tanh u --
+    asinh (Dual u u') = Dual (asinh u) (u' / sqrt (u * u + 1)) --
+    acosh (Dual u u') = Dual (acosh u) (u' / sqrt (u * u - 1)) --
+    atanh (Dual u u') = Dual (atanh u) (u' / (1 - u * u)) --
     log1p (Dual u u') = Dual (log1p u) (u' / (1 + u))
     expm1 (Dual u u') = Dual (expm1 u) (u' * exp u)
 
+-- | The real part of a dual number.
 realPart :: Dual a -> a
 realPart (Dual u _) = u
 
+-- | The dual part of a dual number.
 dualPart :: Dual a -> a
 dualPart (Dual _ u') = u'
 
+-- | The derivative of a function.
 derivative :: (Floating a) => (forall b. Floating b => b -> b) -> a -> a
 derivative f x = dualPart (f (Dual x 1))
