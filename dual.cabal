@@ -1,9 +1,12 @@
-cabal-version:   3.14
+cabal-version:   3.0
 name:            dual
 version:         0.1.0.0
-license:         NONE
+license:         BSD-3-Clause
+license-file:    LICENSE
 author:          konsumlamm
 maintainer:      konsumlamm@gmail.com
+bug-reports:     https://github.com/konsumlamm/dual/issues
+synopsis:        Dual numbers
 build-type:      Simple
 extra-doc-files: CHANGELOG.md
 
