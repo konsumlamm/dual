@@ -5,7 +5,7 @@ on:
   - pull_request
 
 jobs:
-  build:
+  ghc:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -27,3 +27,24 @@ jobs:
         run: cabal build
       - name: Test
         run: cabal test --enable-tests --test-show-details=direct
+
+  mhs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: main
+      - name: Checkout MicroHs
+        uses: actions/checkout@v4
+        with:
+          repository: augustss/MicroHs
+          path: mhs
+      - name: Install MicroHs
+        run: |
+          cd mhs
+          make install
+      - name: Build
+        run: |
+          PATH="$HOME/.mcabal/bin:$PATH"
+          cd main
+          mcabal install
